@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEPI 🍋 — Free APIs for Everyone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080810;
+  --card: #0f0f1a;
+  --border: #1e1e30;
+  --yellow: #f5c518;
+  --orange: #ff6b35;
+  --text: #e8e8f0;
+  --muted: #555570;
+  --green: #22c55e;
+  --blue: #3b82f6;
+  --purple: #a855f7;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* BG GRID */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(245,197,24,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,197,24,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NAVBAR */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(8,8,16,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--yellow);
+  text-decoration: none;
+}
+.logo span { color: var(--orange); }
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-btn {
+  background: var(--yellow);
+  color: #000 !important;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.85rem !important;
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  z-index: 1;
+  padding: 10rem 2rem 5rem;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(245,197,24,0.1);
+  border: 1px solid rgba(245,197,24,0.2);
+  border-radius: 999px;
+  padding: 0.3rem 1rem;
+  font-size: 0.8rem;
+  color: var(--yellow);
+  margin-bottom: 1.5rem;
+  font-family: 'DM Mono', monospace;
+}
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+}
+.hero h1 .accent { color: var(--yellow); }
+.hero h1 .accent2 { color: var(--orange); }
+.hero p {
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 550px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+.hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--yellow);
+  color: #000;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,197,24,0.3); }
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 0.95rem;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+.btn-secondary:hover { border-color: var(--muted); }
+
+/* STATS */
+.stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  padding: 2rem;
+  flex-wrap: wrap;
+}
+.stat { text-align: center; }
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--yellow);
+}
+.stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+/* SECTION */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+.section-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 2.5rem; }
+
+/* API GRID */
+.api-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+}
+.api-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.api-card:hover { border-color: var(--yellow); transform: translateY(-2px); }
+.api-card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+.api-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.api-icon.yellow { background: rgba(245,197,24,0.15); }
+.api-icon.orange { background: rgba(255,107,53,0.15); }
+.api-icon.green { background: rgba(34,197,94,0.15); }
+.api-icon.blue { background: rgba(59,130,246,0.15); }
+.api-icon.purple { background: rgba(168,85,247,0.15); }
+.api-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.api-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.5; margin-bottom: 1rem; }
+.api-endpoint {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  color: var(--yellow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.method-badge {
+  background: rgba(34,197,94,0.15);
+  color: var(--green);
+  font-size: 0.65rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+/* CATEGORY TABS */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.tab {
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.83rem;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.tab.active, .tab:hover {
+  background: var(--yellow);
+  color: #000;
+  border-color: var(--yellow);
+}
+
+/* DONATE SECTION */
+.donate-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+.donate-section h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.donate-section p { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+
+.form-group { margin-bottom: 1rem; text-align: left; }
+.form-group label { font-size: 0.83rem; color: var(--muted); display: block; margin-bottom: 0.4rem; }
+.form-group input, .form-group select {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus { border-color: var(--yellow); }
+.form-group select option { background: #1a1a2e; }
+.gift-types {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.gift-type {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.gift-type:hover, .gift-type.selected {
+  border-color: var(--yellow);
+  background: rgba(245,197,24,0.1);
+  color: var(--yellow);
+}
+.gift-type .gift-icon { font-size: 1.3rem; display: block; margin-bottom: 0.2rem; }
+.submit-btn {
+  width: 100%;
+  background: var(--yellow);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 0.85rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+  margin-top: 0.5rem;
+}
+.submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,197,24,0.3); }
+.success-msg {
+  display: none;
+  background: rgba(34,197,94,0.1);
+  border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  color: var(--green);
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+/* FOOTER */
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+footer .footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--yellow);
+  margin-bottom: 0.5rem;
+}
+
+/* TRY IT MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+.modal-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; }
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1.3rem;
+  padding: 0.2rem;
+}
+.try-url {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--yellow);
+  margin-bottom: 1rem;
+  word-break: break-all;
+}
+.try-btn {
+  background: var(--yellow);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.try-btn:hover { opacity: 0.9; }
+.response-box {
+  margin-top: 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--green);
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 300px;
+  overflow-y: auto;
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .gift-types { grid-template-columns: repeat(3, 1fr); }
+  .stats { gap: 1.5rem; }
+  nav { padding: 1rem; }
+  .nav-links a:not(.nav-btn) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">LE<span>PI</span> 🍋</a>
+  <div class="nav-links">
+    <a href="#apis">APIs</a>
+    <a href="#docs">Docs</a>
+    <a href="#donate">Support</a>
+    <a href="#donate" class="nav-btn">☕ Donate</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🍋 Free · No Auth · No Limits</div>
+  <h1>APIs that are<br><span class="accent">actually</span> <span class="accent2">free</span></h1>
+  <p>LEPI gives you 30+ free APIs for fun, bots, games, and tools. No signup, no API keys, just use them.</p>
+  <div class="hero-btns">
+    <a href="#apis" class="btn-primary">Browse APIs →</a>
+    <a href="#docs" class="btn-secondary">Read Docs</a>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num">30+</div><div class="stat-label">Free APIs</div></div>
+  <div class="stat"><div class="stat-num">0</div><div class="stat-label">Auth Required</div></div>
+  <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Requests</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free Forever</div></div>
+</div>
+
+<section id="apis">
+  <div class="section-title">All APIs</div>
+  <div class="section-sub">Click any card to try it live</div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="filterAPIs('all', this)">All</button>
+    <button class="tab" onclick="filterAPIs('fun', this)">🎉 Fun</button>
+    <button class="tab" onclick="filterAPIs('utility', this)">🛠️ Utility</button>
+    <button class="tab" onclick="filterAPIs('discord', this)">💬 Discord</button>
+    <button class="tab" onclick="filterAPIs('bot', this)">🤖 Bot Tools</button>
+    <button class="tab" onclick="filterAPIs('roblox', this)">🎮 Roblox</button>
+    <button class="tab" onclick="filterAPIs('captcha', this)">🔒 CAPTCHA</button>
+  </div>
+
+  <div class="api-grid" id="apiGrid"></div>
+</section>
+
+<section id="donate" style="padding-top: 2rem;">
+  <div class="donate-section">
+    <div style="font-size:2.5rem; margin-bottom:0.75rem;">🍋</div>
+    <h2>Support LEPI</h2>
+    <p>LEPI is 100% free. If you want to support, donate a gift card code and get a shoutout!</p>
+
+    <div style="margin-bottom: 1rem; text-align: left;">
+      <label style="font-size:0.83rem; color: var(--muted); display:block; margin-bottom:0.5rem;">Select Gift Card Type</label>
+      <div class="gift-types" id="giftTypes">
+        <div class="gift-type" onclick="selectGift(this, 'Steam')"><span class="gift-icon">🎮</span>Steam</div>
+        <div class="gift-type" onclick="selectGift(this, 'Roblox')"><span class="gift-icon">🟥</span>Roblox</div>
+        <div class="gift-type" onclick="selectGift(this, 'Fortnite')"><span class="gift-icon">⚡</span>Fortnite</div>
+        <div class="gift-type" onclick="selectGift(this, 'Google Play')"><span class="gift-icon">▶️</span>Google</div>
+        <div class="gift-type" onclick="selectGift(this, 'Minecraft')"><span class="gift-icon">⛏️</span>Minecraft</div>
+        <div class="gift-type" onclick="selectGift(this, 'Microsoft')"><span class="gift-icon">🪟</span>Microsoft</div>
+        <div class="gift-type" onclick="selectGift(this, 'Xbox')"><span class="gift-icon">🎯</span>Xbox</div>
+      </div>
+    </div>
+
+    <form id="donateForm">
+      <input type="hidden" id="selectedCardType" name="card_type" value="">
+      <div class="form-group">
+        <label>Your Username</label>
+        <input type="text" name="username" id="donorUsername" placeholder="YourUsername" required>
+      </div>
+      <div class="form-group">
+        <label>Gift Card Code</label>
+        <input type="text" name="code" id="donorCode" placeholder="XXXXX-XXXXX-XXXXX" required style="font-family:'DM Mono',monospace;">
+      </div>
+      <div class="form-group">
+        <label>Email (optional)</label>
+        <input type="email" name="email" placeholder="for shoutout notification">
+      </div>
+      <button type="submit" class="submit-btn">🎁 Send Donation</button>
+    </form>
+    <div class="success-msg" id="successMsg">
+      🎉 Thank you so much! Your donation has been received. You'll get a shoutout soon!
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">LEPI 🍋</div>
+  <p>Free APIs for everyone. Built with ❤️</p>
+  <p style="margin-top:0.5rem; font-size:0.75rem;">No tracking · No auth · Always free</p>
+</footer>
+
+<!-- TRY IT MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Try API</div>
+      <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="try-url" id="modalUrl"></div>
+    <button class="try-btn" onclick="tryAPI()">▶ Run Request</button>
+    <div class="response-box" id="responseBox">Loading...</div>
+  </div>
+</div>
+
+<script>
+const apis = [
+  { name: "Joke Generator", desc: "Get a fresh AI-generated joke every time. Setup + punchline format.", endpoint: "/api/joke", category: "fun", icon: "😂", color: "yellow" },
+  { name: "Roast Generator", desc: "Get a savage funny roast generated by AI. Different every time.", endpoint: "/api/roast", category: "fun", icon: "🔥", color: "orange" },
+  { name: "Trivia", desc: "Random trivia question with 4 options and the answer. Add ?category=science etc.", endpoint: "/api/trivia", category: "fun", icon: "🧠", color: "blue" },
+  { name: "Fake Person", desc: "Generate a complete fake person with name, age, job, email and more.", endpoint: "/api/fakeperson", category: "fun", icon: "👤", color: "purple" },
+  { name: "Rock Paper Scissors", desc: "Play RPS against the API. Add ?pick=rock/paper/scissors", endpoint: "/api/rps?pick=rock", category: "fun", icon: "✂️", color: "green" },
+  { name: "Coin Flip", desc: "Flip a coin and get heads or tails.", endpoint: "/api/coinflip", category: "fun", icon: "🪙", color: "yellow" },
+  { name: "Dice Roller", desc: "Roll any dice. Add ?sides=20 for a d20, up to 1000 sides!", endpoint: "/api/dice?sides=6", category: "fun", icon: "🎲", color: "orange" },
+  { name: "Magic 8 Ball", desc: "Ask a question and get a mystical answer. Add ?q=your+question", endpoint: "/api/8ball?q=Will+I+be+lucky", category: "fun", icon: "🎱", color: "purple" },
+  { name: "Would You Rather", desc: "Get a random Would You Rather question with two options.", endpoint: "/api/wyr", category: "fun", icon: "🤔", color: "blue" },
+  { name: "Compliment", desc: "Get a genuine AI-generated compliment to brighten someone's day.", endpoint: "/api/compliment", category: "fun", icon: "💌", color: "yellow" },
+  { name: "Random Fact", desc: "Get a surprising interesting fact you probably didn't know.", endpoint: "/api/fact", category: "fun", icon: "💡", color: "orange" },
+  { name: "Quote Generator", desc: "Get an original inspirational or funny quote with author.", endpoint: "/api/quote", category: "fun", icon: "💬", color: "green" },
+  { name: "Password Generator", desc: "Generate a strong password. Add ?length=32&symbols=true&numbers=true", endpoint: "/api/password?length=16", category: "utility", icon: "🔑", color: "orange" },
+  { name: "Username Generator", desc: "Get 5 creative unique usernames generated by AI.", endpoint: "/api/username", category: "utility", icon: "🏷️", color: "blue" },
+  { name: "Random Color", desc: "Get a random color in HEX and RGB format.", endpoint: "/api/color", category: "utility", icon: "🎨", color: "purple" },
+  { name: "UUID Generator", desc: "Generate a random UUID v4 for your projects.", endpoint: "/api/uuid", category: "utility", icon: "🆔", color: "green" },
+  { name: "Base64", desc: "Encode or decode base64. Add ?text=hello or ?decode=aGVsbG8=", endpoint: "/api/base64?text=hello", category: "utility", icon: "🔄", color: "yellow" },
+  { name: "Word Counter", desc: "Count words, characters and sentences. Add ?text=your+text", endpoint: "/api/wordcount?text=Hello+World", category: "utility", icon: "📝", color: "orange" },
+  { name: "Timestamp", desc: "Get the current UTC time in multiple formats including Unix.", endpoint: "/api/timestamp", category: "utility", icon: "⏰", color: "blue" },
+  { name: "IP Address", desc: "Get your current IP address.", endpoint: "/api/ip", category: "utility", icon: "🌐", color: "green" },
+  { name: "Snowflake Decoder", desc: "Decode a Discord ID to get creation date and info. Add ?id=123", endpoint: "/api/discord/snowflake?id=1321647789796757605", category: "discord", icon: "❄️", color: "blue" },
+  { name: "Discord Timestamp", desc: "Convert a date to Discord timestamp format. Add ?date=2024-01-01", endpoint: "/api/discord/timestamp", category: "discord", icon: "⏱️", color: "purple" },
+  { name: "Color to Decimal", desc: "Convert HEX color to Discord embed decimal. Add ?hex=ff6b35", endpoint: "/api/discord/colorconvert?hex=f5c518", category: "discord", icon: "🎨", color: "yellow" },
+  { name: "Permission Calculator", desc: "Decode Discord permission values. Add ?value=8 for admin.", endpoint: "/api/discord/permissions?value=8", category: "discord", icon: "🔐", color: "orange" },
+  { name: "Embed Builder", desc: "Build a Discord embed JSON. Add ?title=Hello&description=World&color=ff0000", endpoint: "/api/discord/embedbuilder?title=Hello&description=World", category: "discord", icon: "📋", color: "green" },
+  { name: "Random User Agent", desc: "Get a random real browser user agent string for bots.", endpoint: "/api/bot/useragent", category: "bot", icon: "🕵️", color: "purple" },
+  { name: "Profanity Filter", desc: "Check text for profanity and get a censored version. Add ?text=", endpoint: "/api/bot/profanity?text=hello+world", category: "bot", icon: "🚫", color: "orange" },
+  { name: "Anti-Spam Checker", desc: "Check if text looks like spam using AI. Add ?text=your+text", endpoint: "/api/bot/antispam?text=BUY+NOW+CLICK+HERE", category: "bot", icon: "🛡️", color: "blue" },
+  { name: "Token Generator", desc: "Generate a secure random API token. Add ?length=32", endpoint: "/api/bot/tokengen?length=32", category: "bot", icon: "🎫", color: "green" },
+  { name: "Regex Tester", desc: "Test regex patterns. Add ?pattern=\\d+&text=abc123", endpoint: "/api/bot/regex?pattern=\\d%2B&text=abc123", category: "bot", icon: "🔍", color: "yellow" },
+  { name: "JSON Formatter", desc: "Pretty print or minify JSON. Add ?text={}&minify=true", endpoint: '/api/bot/json?text={"a":1,"b":2}', category: "bot", icon: "📄", color: "purple" },
+  { name: "Roblox Username Ideas", desc: "Generate 5 creative Roblox-style usernames.", endpoint: "/api/roblox/username", category: "roblox", icon: "🎮", color: "orange" },
+  { name: "Roblox User Lookup", desc: "Look up a Roblox user by ID. Add ?id=1", endpoint: "/api/roblox/user?id=1", category: "roblox", icon: "👾", color: "blue" },
+  { name: "Math CAPTCHA", desc: "Generate a math problem CAPTCHA. Verify with POST /api/captcha/verify", endpoint: "/api/captcha/math", category: "captcha", icon: "➕", color: "green" },
+  { name: "Text CAPTCHA", desc: "Generate an image CAPTCHA with distorted text. Returns PNG image.", endpoint: "/api/captcha/text", category: "captcha", icon: "🔤", color: "yellow" },
+  { name: "Emoji CAPTCHA", desc: "Click the correct emoji CAPTCHA. Great for bots.", endpoint: "/api/captcha/emoji", category: "captcha", icon: "😀", color: "orange" },
+  { name: "Checkbox CAPTCHA", desc: "Simple I'm not a robot checkbox CAPTCHA token.", endpoint: "/api/captcha/checkbox", category: "captcha", icon: "☑️", color: "purple" },
+];
+
+let currentEndpoint = "";
+
+function renderAPIs(filter = "all") {
+  const grid = document.getElementById("apiGrid");
+  const filtered = filter === "all" ? apis : apis.filter(a => a.category === filter);
+  grid.innerHTML = filtered.map(api => `
+    <div class="api-card" onclick="openModal('${api.name}', '${api.endpoint}')">
+      <div class="api-card-header">
+        <div class="api-icon ${api.color}">${api.icon}</div>
+        <div class="api-name">${api.name}</div>
+      </div>
+      <div class="api-desc">${api.desc}</div>
+      <div class="api-endpoint">
+        <span>${api.endpoint.length > 35 ? api.endpoint.substring(0,35)+'...' : api.endpoint}</span>
+        <span class="method-badge">GET</span>
+      </div>
+    </div>
+  `).join("");
+}
+
+function filterAPIs(cat, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderAPIs(cat);
+}
+
+function openModal(name, endpoint) {
+  currentEndpoint = endpoint;
+  document.getElementById("modalTitle").textContent = name;
+  document.getElementById("modalUrl").textContent = window.location.origin + endpoint;
+  document.getElementById("responseBox").style.display = "none";
+  document.getElementById("modalOverlay").classList.add("open");
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById("modalOverlay")) {
+    document.getElementById("modalOverlay").classList.remove("open");
+  }
+}
+
+async function tryAPI() {
+  const box = document.getElementById("responseBox");
+  box.style.display = "block";
+  box.textContent = "Loading...";
+  box.style.color = "var(--muted)";
+  try {
+    const res = await fetch(currentEndpoint);
+    if (res.headers.get("content-type")?.includes("image")) {
+      box.textContent = "✅ Returns an image (PNG). Open the URL directly in your browser to see it!";
+      box.style.color = "var(--green)";
+      return;
+    }
+    const data = await res.json();
+    box.textContent = JSON.stringify(data, null, 2);
+    box.style.color = "var(--green)";
+  } catch(e) {
+    box.textContent = "Error: " + e.message;
+    box.style.color = "#ef4444";
+  }
+}
+
+// Gift card selection
+let selectedGift = "";
+function selectGift(el, type) {
+  document.querySelectorAll('.gift-type').forEach(g => g.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedGift = type;
+  document.getElementById('selectedCardType').value = type;
+}
+
+// Donate form
+document.getElementById("donateForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!selectedGift) { alert("Please select a gift card type!"); return; }
+  const form = new FormData(e.target);
+  try {
+    const res = await fetch("/api/donate", { method: "POST", body: form });
+    const data = await res.json();
+    if (data.success) {
+      e.target.style.display = "none";
+      document.getElementById("successMsg").style.display = "block";
+      setTimeout(() => { window.location.href = "/"; }, 3000);
+    }
+  } catch(err) {
+    alert("Something went wrong. Try again!");
+  }
+});
+
+renderAPIs();
+</script>
+</body>
+</html>
