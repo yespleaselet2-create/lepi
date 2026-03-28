@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+anthropic
+discord.py
+Pillow
+python-multipart
+aiohttp
+aiofiles
+python-dotenv
+requests
